@@ -3,11 +3,13 @@ package com.hendisantika.abcbank.service;
 import com.hendisantika.abcbank.AbcBankApplication;
 import com.hendisantika.abcbank.config.RepositoryTestConfiguration;
 import com.hendisantika.abcbank.entity.Account;
+import com.hendisantika.abcbank.entity.Transaction;
 import com.hendisantika.abcbank.repository.AccountRepository;
 import com.hendisantika.abcbank.repository.TransactionRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,8 +17,11 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.validateMockitoUsage;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by IntelliJ IDEA.
@@ -67,5 +72,29 @@ public class TransactionServiceTest {
     @AfterEach
     public void validate() {
         validateMockitoUsage();
+    }
+
+    @Test
+    public void getTransactionHistoryTest() {
+        List<Transaction> list = new ArrayList<Transaction>();
+        Transaction a1 = Transaction.builder()
+                .account(account1)
+                .amount(new BigDecimal("87.90")).discriminator(Transaction.TransactionType.DEBIT).build();
+
+        Transaction a2 = Transaction.builder().account(account2).amount(new BigDecimal("54.70")).discriminator(Transaction.TransactionType.CREDIT)
+                .build();
+        Transaction a3 = Transaction.builder().account(account3).amount(new BigDecimal("54.70"))
+                .discriminator(Transaction.TransactionType.DEBIT).build();
+
+        list.add(a1);
+        list.add(a2);
+        list.add(a3);
+
+        when(txRepo.findAll()).thenReturn(list);
+
+        // test
+        List<Transaction> empList = txService.getTransactionHistory();
+
+        assertEquals(3, empList.size());
     }
 }
