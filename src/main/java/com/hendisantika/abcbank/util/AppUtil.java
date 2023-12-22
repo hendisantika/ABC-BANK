@@ -1,9 +1,13 @@
 package com.hendisantika.abcbank.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,4 +30,29 @@ public class AppUtil {
         return !isNotNullObjects(object);
     }
 
+    /**
+     * <pre>
+     * if <i>String</i>:
+     *  null	@return false
+     *  ""	@return false
+     *  " "	@return false
+     *  if <i>Collection</i>:
+     *  null or empty	@return false
+     *  if <i>Map</i>:
+     *  null or empty	@return false
+     * </pre>
+     *
+     * @param objects
+     * @return
+     */
+    public static boolean isNotNullNotEmptyObjects(Object... objects) {
+        Predicate<Object> predicateStr = (x -> String.class.isAssignableFrom(x.getClass())
+                && StringUtils.isEmpty(x.toString().trim()));
+        Predicate<Object> predicateColl = (x -> Collection.class.isAssignableFrom(x.getClass())
+                && ((Collection<?>) x).isEmpty());
+        Predicate<Object> predicateMap = (x -> Map.class.isAssignableFrom(x.getClass()) && ((Map<?, ?>) x).isEmpty());
+
+        return isNotNullObjects(objects) && !Arrays.stream(objects)
+                .filter(x -> predicateStr.or(predicateColl).or(predicateMap).test(x)).findAny().isPresent();
+    }
 }
