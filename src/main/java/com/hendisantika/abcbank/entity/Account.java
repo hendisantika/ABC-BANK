@@ -3,12 +3,14 @@ package com.hendisantika.abcbank.entity;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.hendisantika.abcbank.entity.seqgenerator.StringSequenceIdentifier;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -53,7 +55,7 @@ public class Account implements Serializable {
     private String acountHolder;
 
     @Column(name = "balance", precision = 19, scale = 2, columnDefinition = "DECIMAL(19,2)")
-    @Type(type = "java.math.BigDecimal")
+    @JdbcTypeCode(SqlTypes.DOUBLE)
     private BigDecimal balance;
 
     @Temporal(TemporalType.DATE)
