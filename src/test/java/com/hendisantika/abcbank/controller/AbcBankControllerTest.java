@@ -184,4 +184,11 @@ public class AbcBankControllerTest {
         Assertions.assertEquals(2, txAccountList.size());
         // Assert.assertEquals(new BigDecimal("10.80").negate(), txForCurrAccountOpn.get().getWithdrawl());
     }
+
+    private Account createAccount(Account acc) {
+        ResponseEntity<Account> responseEntity = this.testRestTemplate.exchange("/accounts", HttpMethod.POST,
+                AppUtil.getEntityWithHttpHeader(acc), Account.class);
+        acc = responseEntity.getBody();
+        return acc;
+    }
 }
