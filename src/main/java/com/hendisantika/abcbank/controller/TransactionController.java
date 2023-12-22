@@ -1,8 +1,14 @@
 package com.hendisantika.abcbank.controller;
 
+import com.hendisantika.abcbank.entity.Account;
+import com.hendisantika.abcbank.model.DepositToAccountModel;
 import com.hendisantika.abcbank.model.WithdrawFromAccountModel;
 import com.hendisantika.abcbank.service.AccountTransactionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,9 +44,53 @@ public class TransactionController {
     private final ModelMapper modelMapper;
 
     @Operation(summary = "withdraw amount")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Get Success",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Account.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "Bad Request",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Account.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "Not Found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Account.class))}),
+            @ApiResponse(responseCode = "503",
+                    description = "Service Unavailable",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Account.class))})
+    })
     @PostMapping(value = "/withdraw")
     public ResponseEntity<?> withdraw(@Valid @RequestBody WithdrawFromAccountModel reqModel) {
         txService.withdrawal(reqModel.getFromAccountNumber(), reqModel.getWithdrawlAmount());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @Operation(summary = "deposit amount")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Get Success",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Account.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "Bad Request",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Account.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "Not Found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Account.class))}),
+            @ApiResponse(responseCode = "503",
+                    description = "Service Unavailable",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Account.class))})
+    })
+    @PostMapping(value = "/deposit")
+    public ResponseEntity<?> deposit(@Valid @RequestBody DepositToAccountModel reqModel) {
+        txService.deposit(reqModel.getDepositorAccountNumber(), reqModel.getDepositAmount());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
