@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -96,5 +97,16 @@ public class TransactionLock {
         }
 
         return isAcquired;
+    }
+
+    private static class AccountLock {
+        private final ReentrantLock lock;
+
+        private final AtomicInteger lockCount;
+
+        public AccountLock(ReentrantLock lock, int initialValue) {
+            this.lock = lock;
+            lockCount = new AtomicInteger(initialValue);
+        }
     }
 }
