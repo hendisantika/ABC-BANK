@@ -143,4 +143,22 @@ public class TransactionServiceTest {
 
     }
 
+    @Test
+    public void depositTest() {
+
+        Account dummyAcc = Account.builder().accountNumber("A1_dummy").acountHolder("dummy user")
+                .balance(new BigDecimal("89.00")).transactions(new ArrayList<>()).build();
+        // mock
+        when(accountRepo.findByAccountNumber(dummyAcc.getAccountNumber())).thenReturn(dummyAcc);
+
+        Mockito.when(accountRepo.save(Mockito.any())).thenAnswer(i -> i.getArguments()[0]);
+
+        BigDecimal dummyAccInitialBalance = dummyAcc.getBalance();
+
+        // test
+        Account acc = txService.deposit(dummyAcc.getAccountNumber(), new BigDecimal("10.00"));
+
+        assertEquals(dummyAccInitialBalance.add(new BigDecimal("10.00")), acc.getBalance());
+
+    }
 }
