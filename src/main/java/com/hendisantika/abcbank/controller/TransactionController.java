@@ -2,10 +2,7 @@ package com.hendisantika.abcbank.controller;
 
 import com.hendisantika.abcbank.entity.Account;
 import com.hendisantika.abcbank.entity.Transaction;
-import com.hendisantika.abcbank.model.DepositToAccountModel;
-import com.hendisantika.abcbank.model.TransactionHistory;
-import com.hendisantika.abcbank.model.TransferToAccountModel;
-import com.hendisantika.abcbank.model.WithdrawFromAccountModel;
+import com.hendisantika.abcbank.model.*;
 import com.hendisantika.abcbank.service.AccountTransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -166,6 +163,39 @@ public class TransactionController {
             });
         });
         txHistoryList.sort(Comparator.comparing(TransactionHistory::getTransactionDate).reversed());
+        return new ResponseEntity<>(txHistoryList, HttpStatus.OK);
+    }
+
+    @Operation(summary = "account transaction history")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Get Success",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AccountTransactionHistory.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "Bad Request",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AccountTransactionHistory.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "Not Found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AccountTransactionHistory.class))}),
+            @ApiResponse(responseCode = "503",
+                    description = "Service Unavailable",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AccountTransactionHistory.class))})
+    })
+    @GetMapping(value = "/account-transaction-history")
+    public ResponseEntity<List<AccountTransactionHistory>> accountTxHistory() {
+        List<AccountTransactionHistory> txHistoryList = new ArrayList<>();
+        List<Transaction> transactionHistory = txService.getTransactionHistory();
+        this.modelMapper.addConverter(AccountTransactionHistory.converter());
+
+        transactionHistory.stream().sorted(Comparator.comparing(Transaction::getTransactionDate).reversed())
+                .map(x -> this.modelMapper.map(x, AccountTransactionHistory.class))
+                .sorted(Comparator.comparing(AccountTransactionHistory::getCreatedDate))
+                .collect(Collectors.toCollection(() -> txHistoryList));
+
         return new ResponseEntity<>(txHistoryList, HttpStatus.OK);
     }
 }
