@@ -135,4 +135,11 @@ public class AppUtil {
 
         return request;
     }
+
+    public static HttpEntity<?> getHttpHeader() {
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<?> request = new HttpEntity<>(headers);
+        return request;
+    }
+
 }
