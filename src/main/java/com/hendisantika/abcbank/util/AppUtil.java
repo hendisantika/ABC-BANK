@@ -21,4 +21,9 @@ public class AppUtil {
         boolean isAnyNull = Arrays.stream(objects).anyMatch(x -> Objects.isNull(x));
         return !isAnyNull;
     }
+
+    public static boolean isNullObject(Object object) {
+        return !isNotNullObjects(object);
+    }
+
 }
