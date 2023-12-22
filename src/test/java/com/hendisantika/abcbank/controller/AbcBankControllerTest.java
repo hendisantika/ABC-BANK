@@ -2,7 +2,9 @@ package com.hendisantika.abcbank.controller;
 
 import com.hendisantika.abcbank.AbcBankApplication;
 import com.hendisantika.abcbank.entity.Account;
+import com.hendisantika.abcbank.model.TransactionHistory;
 import com.hendisantika.abcbank.model.TransferToAccountModel;
+import com.hendisantika.abcbank.model.WithdrawFromAccountModel;
 import com.hendisantika.abcbank.util.AppUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +22,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created by IntelliJ IDEA.
@@ -74,5 +79,43 @@ public class AbcBankControllerTest {
         Assertions.assertEquals(a1BalBeforeTransfer.subtract(new BigDecimal("10.80")),
                 responseEntity.getBody().getBalance());
 
+    }
+
+    @Test
+    public void testTransactionHistory() {
+        Account a1 = Account.builder().acountHolder("A1").balance(new BigDecimal("29.80")).build();
+        a1 = createAccount(a1);
+
+        BigDecimal a1BalBeforeTransfer = a1.getBalance();
+        String url = "/withdraw";
+        // URI (URL) parameters
+        Map<String, String> uriParams = new HashMap<>();
+        WithdrawFromAccountModel requestObject = WithdrawFromAccountModel.builder()
+                .fromAccountNumber(a1.getAccountNumber()).withdrawlAmount(new BigDecimal("10.80")).build();
+
+        URI uri = UriComponentsBuilder.fromUriString(url).buildAndExpand(uriParams).toUri();
+
+        ResponseEntity<?> transferResponseEntity = this.testRestTemplate.exchange(uri, HttpMethod.POST,
+                AppUtil.getEntityWithHttpHeader(requestObject), Object.class);
+
+        Assertions.assertEquals(HttpStatus.OK, transferResponseEntity.getStatusCode());
+
+        // load account1 again
+        Account account = getAccount(a1.getAccountNumber());
+        // verify
+        Assertions.assertEquals(a1BalBeforeTransfer.subtract(new BigDecimal("10.80")),
+                account.getBalance());
+
+        // verify the transaction history record
+        ResponseEntity<List<TransactionHistory>> txHistoryResponse = this.testRestTemplate.exchange(
+                "/transaction-history", HttpMethod.GET, AppUtil.getHttpHeader(),
+                new ParameterizedTypeReference<List<TransactionHistory>>() {
+                });
+        List<TransactionHistory> txHistoryResponseBodyList = txHistoryResponse.getBody();
+        Optional<TransactionHistory> txForCurrAccountOpn = txHistoryResponseBodyList.stream()
+                .filter(x -> x.getAccountNumber().equals(account.getAccountNumber())).findAny();
+
+        Assertions.assertTrue(txForCurrAccountOpn.isPresent());
+        Assertions.assertEquals(new BigDecimal("10.80").negate(), txForCurrAccountOpn.get().getWithdrawl());
     }
 }
