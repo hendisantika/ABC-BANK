@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
 import java.util.*;
@@ -125,5 +127,12 @@ public class AppUtil {
         c.set(Calendar.SECOND, c.getActualMinimum(Calendar.SECOND));
         c.set(Calendar.MILLISECOND, c.getActualMinimum(Calendar.MILLISECOND));
         return c.getTime();
+    }
+
+    public static <T> HttpEntity<T> getEntityWithHttpHeader(T requestObject) {
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<T> request = new HttpEntity<>(requestObject, headers);
+
+        return request;
     }
 }
