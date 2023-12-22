@@ -70,4 +70,31 @@ public class TransactionLock {
             }
         }
     }
+
+    public boolean tryLock(String accountNumber) {
+        AccountLock accLock = accountLockMap.get(accountNumber);
+        if (accLock == null) {
+            synchronized (this) {
+                accLock = accountLockMap.get(accountNumber);
+                if (accLock == null) {
+                    AccountLock newLock = new AccountLock(new ReentrantLock(), 0);
+                    accountLockMap.put(accountNumber, newLock);
+                    accLock = newLock;
+                }
+            }
+
+        }
+
+        boolean isAcquired = accLock.lock.tryLock();
+        if (isAcquired) {
+            synchronized (this) {
+                accLock.lockCount.incrementAndGet();
+                if (null == accountLockMap.get(accountNumber)) {
+                    accountLockMap.put(accountNumber, accLock);
+                }
+            }
+        }
+
+        return isAcquired;
+    }
 }
