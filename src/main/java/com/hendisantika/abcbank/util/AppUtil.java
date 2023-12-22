@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -75,5 +76,16 @@ public class AppUtil {
 
     public static ObjectNode createJsonNode() {
         return JsonNodeFactory.instance.objectNode();
+    }
+
+    public static ObjectNode createSuccessJsonNode(HttpStatus status, String uri, String message) {
+        ObjectNode jsonNode = createJsonNode();
+        jsonNode.putPOJO("timestamp", new Date());
+        jsonNode.put("status", status.value());
+        jsonNode.putPOJO("reason", status.getReasonPhrase());
+        jsonNode.put("path", uri);
+        jsonNode.put("message", message);
+
+        return jsonNode;
     }
 }
