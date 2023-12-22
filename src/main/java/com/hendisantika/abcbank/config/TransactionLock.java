@@ -52,4 +52,22 @@ public class TransactionLock {
         accLock.lock.lock();
     }
 
+    public void unlock(String accountNumber) {
+        AccountLock accLock = accountLockMap.get(accountNumber);
+        if (accLock != null) {
+            int lockCount = accLock.lockCount.decrementAndGet();
+            accLock.lock.unlock();
+            /*
+             * if count zero take lock and insure count is still zero (no one acquire lock after unlock call)
+             */
+            if (lockCount == 0) {
+                synchronized (this) {
+                    lockCount = accLock.lockCount.get();
+                    if (lockCount == 0) {
+                        accountLockMap.remove(accountNumber);
+                    }
+                }
+            }
+        }
+    }
 }
