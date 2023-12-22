@@ -1,5 +1,7 @@
 package com.hendisantika.abcbank.util;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
@@ -71,4 +73,7 @@ public class AppUtil {
         return entityList.stream().map(entity -> modelMapper.map(entity, outCLass)).collect(Collectors.toList());
     }
 
+    public static ObjectNode createJsonNode() {
+        return JsonNodeFactory.instance.objectNode();
+    }
 }
