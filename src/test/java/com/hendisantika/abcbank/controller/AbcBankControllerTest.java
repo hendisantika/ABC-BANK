@@ -118,4 +118,23 @@ public class AbcBankControllerTest {
         Assertions.assertTrue(txForCurrAccountOpn.isPresent());
         Assertions.assertEquals(new BigDecimal("10.80").negate(), txForCurrAccountOpn.get().getWithdrawl());
     }
+
+    @Test
+    public void testForNotSufficientBalValidationException() {
+        Account a1 = Account.builder().acountHolder("A1").balance(new BigDecimal("29.80")).build();
+        a1 = createAccount(a1);
+
+        String url = "/withdraw";
+        // URI (URL) parameters
+        Map<String, String> uriParams = new HashMap<>();
+        WithdrawFromAccountModel reqModel = WithdrawFromAccountModel.builder().fromAccountNumber(a1.getAccountNumber())
+                .withdrawlAmount(new BigDecimal("30.00")).build();
+
+        URI uri = UriComponentsBuilder.fromUriString(url).buildAndExpand(uriParams).toUri();
+
+        ResponseEntity<?> transferResponseEntity = this.testRestTemplate.exchange(uri, HttpMethod.POST,
+                AppUtil.getEntityWithHttpHeader(reqModel), Object.class);
+
+        Assertions.assertEquals(HttpStatus.CONFLICT, transferResponseEntity.getStatusCode());
+    }
 }
