@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -107,5 +108,10 @@ public class AccountTransactionService {
         account.getTransactions().add(tx);
 
         return this.accountService.saveUpdate(account);
+    }
+
+    @Transactional
+    public List<Transaction> getTransactionHistory() {
+        return this.transactionRepository.findAll();
     }
 }
