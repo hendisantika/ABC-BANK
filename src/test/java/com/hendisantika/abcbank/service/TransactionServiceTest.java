@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -97,4 +98,29 @@ public class TransactionServiceTest {
 
         assertEquals(3, empList.size());
     }
+
+    @Test
+    public void accountTransferA1toA2Test() {
+
+        when(accountRepo.findByAccountNumber(account1.getAccountNumber())).thenReturn(account1);
+        when(accountRepo.findByAccountNumber(account2.getAccountNumber())).thenReturn(account2);
+        Mockito.doNothing().when(entityManager).refresh(Mockito.any());
+
+        Mockito.when(accountRepo.save(Mockito.any())).thenAnswer(i -> i.getArguments()[0]);
+
+        // replaced mocked entity manager using reflection
+        ReflectionTestUtils.setField(txService, "entityManager", entityManager);
+
+        BigDecimal a1InitialBalance = account1.getBalance();
+        BigDecimal a2InitialBalance = account2.getBalance();
+
+        // test
+        txService.transfer(account1.getAccountNumber(), account2.getAccountNumber(),
+                new BigDecimal("10.00"));
+
+        assertEquals(a2InitialBalance.add(new BigDecimal("10.00")), account2.getBalance());
+        assertEquals(a1InitialBalance.subtract(new BigDecimal("10.00")), account1.getBalance());
+
+    }
+
 }
