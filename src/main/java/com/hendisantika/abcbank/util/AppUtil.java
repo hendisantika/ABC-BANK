@@ -1,5 +1,6 @@
 package com.hendisantika.abcbank.util;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
@@ -96,6 +97,21 @@ public class AppUtil {
         jsonNode.putPOJO("error", status.getReasonPhrase());
         jsonNode.put("path", uri);
         jsonNode.put("message", message);
+
+        return jsonNode;
+    }
+
+    public static ObjectNode createErrorJsonNode(HttpStatus status, String uri, Map<String, ObjectNode> messageMap) {
+        ObjectNode jsonNode = createJsonNode();
+        jsonNode.putPOJO("timestamp", new Date());
+        jsonNode.put("status", status.value());
+        jsonNode.putPOJO("error", status.getReasonPhrase());
+        jsonNode.put("path", uri);
+
+        ArrayNode arrayJsonNode = jsonNode.putArray("messages");
+
+        // Get all errors
+        messageMap.forEach((k, v) -> arrayJsonNode.add(v));
 
         return jsonNode;
     }
