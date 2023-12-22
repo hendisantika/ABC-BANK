@@ -99,4 +99,13 @@ public class AccountTransactionService {
         }
     }
 
+
+    private Account depositToAccount(String accountNumber, BigDecimal amount) {
+        Account account = accountService.findByAccountNumber(accountNumber);
+        account.setBalance(account.getBalance().add(amount));
+        Transaction tx = Transaction.builder().account(account).amount(amount).discriminator(Transaction.TransactionType.CREDIT).build();
+        account.getTransactions().add(tx);
+
+        return this.accountService.saveUpdate(account);
+    }
 }
