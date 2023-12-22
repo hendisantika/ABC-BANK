@@ -89,4 +89,14 @@ public class AccountTransactionService {
         }
     }
 
+    @Transactional
+    public Account deposit(String accountNumber, BigDecimal amount) {
+        try {
+            txLock.lock(accountNumber);
+            return this.depositToAccount(accountNumber, amount);
+        } finally {
+            txLock.unlock(accountNumber);
+        }
+    }
+
 }
