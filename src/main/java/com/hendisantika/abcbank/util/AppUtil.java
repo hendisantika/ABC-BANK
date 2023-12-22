@@ -2,12 +2,11 @@ package com.hendisantika.abcbank.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.modelmapper.ModelMapper;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Created by IntelliJ IDEA.
@@ -55,4 +54,21 @@ public class AppUtil {
         return isNotNullObjects(objects) && !Arrays.stream(objects)
                 .filter(x -> predicateStr.or(predicateColl).or(predicateMap).test(x)).findAny().isPresent();
     }
+
+    /**
+     * <p>
+     * Note: outClass object must have default constructor with no arguments
+     * </p>
+     *
+     * @param entityList  list of entities that needs to be mapped
+     * @param outCLass    class of result list element
+     * @param modelMapper ModelMapper instance
+     * @param <D>         type of objects in result list
+     * @param <T>         type of entity in <code>entityList</code>
+     * @return list of mapped object with <code><D></code> type.
+     */
+    public static <D, T> List<D> mapAll(final Collection<T> entityList, Class<D> outCLass, ModelMapper modelMapper) {
+        return entityList.stream().map(entity -> modelMapper.map(entity, outCLass)).collect(Collectors.toList());
+    }
+
 }
