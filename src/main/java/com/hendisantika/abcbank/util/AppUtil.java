@@ -88,4 +88,15 @@ public class AppUtil {
 
         return jsonNode;
     }
+
+    public static ObjectNode createErrorJsonNode(HttpStatus status, String uri, String message) {
+        ObjectNode jsonNode = createJsonNode();
+        jsonNode.putPOJO("timestamp", new Date());
+        jsonNode.put("status", status.value());
+        jsonNode.putPOJO("error", status.getReasonPhrase());
+        jsonNode.put("path", uri);
+        jsonNode.put("message", message);
+
+        return jsonNode;
+    }
 }
