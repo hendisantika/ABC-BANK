@@ -1,7 +1,9 @@
 package com.hendisantika.abcbank.controller;
 
 import com.hendisantika.abcbank.entity.Account;
+import com.hendisantika.abcbank.entity.Transaction;
 import com.hendisantika.abcbank.model.DepositToAccountModel;
+import com.hendisantika.abcbank.model.TransactionHistory;
 import com.hendisantika.abcbank.model.TransferToAccountModel;
 import com.hendisantika.abcbank.model.WithdrawFromAccountModel;
 import com.hendisantika.abcbank.service.AccountTransactionService;
@@ -20,6 +22,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by IntelliJ IDEA.
@@ -119,5 +125,47 @@ public class TransactionController {
         txService.transfer(requestModel.getFromAccountNumber(), requestModel.getToAccountNumber(),
                 requestModel.getTransferAmount());
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(summary = "transaction history")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Get Success",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TransactionHistory.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "Bad Request",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TransactionHistory.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "Not Found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TransactionHistory.class))}),
+            @ApiResponse(responseCode = "503",
+                    description = "Service Unavailable",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TransactionHistory.class))})
+    })
+    @GetMapping(value = "/transaction-history")
+    public ResponseEntity<List<TransactionHistory>> txHistory() {
+        List<TransactionHistory> txHistoryList = new ArrayList<TransactionHistory>();
+        List<Transaction> transactionHistory = txService.getTransactionHistory();
+        Map<Date, Map<String, List<Transaction>>> groupByDateAndAccount = transactionHistory
+                .stream()
+                .sorted(Comparator.comparing(Transaction::getTransactionDate).reversed())
+                .collect(Collectors.groupingBy(tx -> tx.getTxDateWithoutTime(),
+                        Collectors.groupingBy(tx -> tx.getAccountNumber())));
+
+        groupByDateAndAccount.forEach((k, v) -> {
+            v.forEach((key, val) -> {
+                Map<Transaction.TransactionType, BigDecimal> descriminatorSum = val.stream()
+                        .collect(Collectors.groupingBy(Transaction::getDiscriminator,
+                                Collectors.reducing(BigDecimal.ZERO, Transaction::getAmount, BigDecimal::add)));
+
+                txHistoryList.add(TransactionHistory.converter(k, key, descriminatorSum));
+            });
+        });
+        txHistoryList.sort(Comparator.comparing(TransactionHistory::getTransactionDate).reversed());
+        return new ResponseEntity<>(txHistoryList, HttpStatus.OK);
     }
 }
