@@ -58,5 +58,35 @@ public class AccountTransactionService {
         }
     }
 
+    @Transactional
+    public void transfer(String fromAccountNumber, String toAccountNumber, BigDecimal amount) {
+        //order the count to prevent deadlock (a,b) then (b,c) then (c,a) OR (a,b) then (b,a)
+        String lockSmallestFirst = fromAccountNumber;
+        String lockgigerNest = toAccountNumber;
+        if (fromAccountNumber.compareTo(toAccountNumber) > 0) {
+            lockSmallestFirst = toAccountNumber;
+            lockgigerNest = fromAccountNumber;
+        }
+        try {
+            txLock.lock(lockSmallestFirst);
+            txLock.lock(lockgigerNest);
+
+            Account fromAccount = accountService.findByAccountNumber(fromAccountNumber);
+            // check sufficient balance after accruing lock - may be previous tx has already withdraw some amount
+            insureBalance(amount, fromAccount);
+
+            BigDecimal subtractedAmt = fromAccount.getBalance().subtract(amount);
+            fromAccount.setBalance(subtractedAmt);
+            Transaction txDebit = Transaction.builder().account(fromAccount).amount(amount).discriminator(Transaction.TransactionType.DEBIT).build();
+            fromAccount.getTransactions().add(txDebit);
+
+            accountService.saveUpdate(fromAccount);
+
+            this.depositToAccount(toAccountNumber, amount);
+        } finally {
+            txLock.unlock(lockgigerNest);
+            txLock.unlock(lockSmallestFirst);
+        }
+    }
 
 }
