@@ -64,4 +64,11 @@ public class GlobalResponseEntityExceptionHandler extends ResponseEntityExceptio
 
         return new ResponseEntity<>(errorJsonNode, HttpStatus.NOT_FOUND);
     }
+
+    private static ObjectNode createObjNode(String filed, String message) {
+        ObjectNode jsonNode = AppUtil.createJsonNode();
+        jsonNode.put("field", filed);
+        jsonNode.put("message", message);
+        return jsonNode;
+    }
 }
