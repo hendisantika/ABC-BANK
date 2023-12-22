@@ -123,4 +123,24 @@ public class TransactionServiceTest {
 
     }
 
+    @Test
+    public void withdrawTest() {
+
+        when(accountRepo.findByAccountNumber(account1.getAccountNumber())).thenReturn(account1);
+        Mockito.doNothing().when(entityManager).refresh(Mockito.any());
+
+        Mockito.when(accountRepo.save(Mockito.any())).thenAnswer(i -> i.getArguments()[0]);
+
+        // replaced mocked entity manager using reflection
+        ReflectionTestUtils.setField(txService, "entityManager", entityManager);
+
+        BigDecimal a1InitialBalance = account1.getBalance();
+
+        // test
+        txService.withdrawal(account1.getAccountNumber(), new BigDecimal("10.00"));
+
+        assertEquals(a1InitialBalance.subtract(new BigDecimal("10.00")), account1.getBalance());
+
+    }
+
 }
