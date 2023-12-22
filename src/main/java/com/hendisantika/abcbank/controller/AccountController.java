@@ -8,9 +8,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -87,5 +89,30 @@ public class AccountController {
     public ResponseEntity<Account> getAccount(@NotBlank @PathVariable String accountNumber) {
         Account accounts = accountService.findByAccountNumber(accountNumber);
         return ResponseEntity.ok(accounts);
+    }
+
+    @Operation(summary = "open an account")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Get Success",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Account.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "Bad Request",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Account.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "Not Found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Account.class))}),
+            @ApiResponse(responseCode = "503",
+                    description = "Service Unavailable",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Account.class))})
+    })
+    @PostMapping
+    public ResponseEntity<Account> createAccount(@Valid @RequestBody Account account) {
+        Account dbAccount = accountService.saveUpdate(account);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dbAccount);
     }
 }
