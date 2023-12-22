@@ -1,10 +1,15 @@
 package com.hendisantika.abcbank.service;
 
 
+import com.hendisantika.abcbank.entity.Account;
 import com.hendisantika.abcbank.repository.AccountRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,5 +25,12 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class AccountService {
-    private final AccountRepository accountRepo;
+    private final AccountRepository accountRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public List<Account> getAccounts() {
+        return accountRepository.findAll();
+    }
 }
