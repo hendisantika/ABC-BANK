@@ -3,7 +3,9 @@ package com.hendisantika.abcbank.service;
 
 import com.hendisantika.abcbank.entity.Account;
 import com.hendisantika.abcbank.repository.AccountRepository;
+import com.hendisantika.abcbank.util.AppUtil;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,5 +40,15 @@ public class AccountService {
     @Transactional
     public Account saveUpdate(Account entity) {
         return accountRepository.save(entity);
+    }
+
+    public Account findByAccountNumber(String accountNumber) {
+        Account account = accountRepository.findByAccountNumber(accountNumber);
+        if (AppUtil.isNullObject(account)) {
+            String errMessage = String.format("No entity found for Account# %s", accountNumber);
+            log.error(errMessage);
+            throw new EntityNotFoundException(errMessage);
+        }
+        return account;
     }
 }
