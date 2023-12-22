@@ -2,6 +2,7 @@ package com.hendisantika.abcbank.controller;
 
 import com.hendisantika.abcbank.entity.Account;
 import com.hendisantika.abcbank.model.DepositToAccountModel;
+import com.hendisantika.abcbank.model.TransferToAccountModel;
 import com.hendisantika.abcbank.model.WithdrawFromAccountModel;
 import com.hendisantika.abcbank.service.AccountTransactionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -93,4 +94,30 @@ public class TransactionController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
+    @Operation(summary = "transfer amount to another account ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Get Success",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Account.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "Bad Request",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Account.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "Not Found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Account.class))}),
+            @ApiResponse(responseCode = "503",
+                    description = "Service Unavailable",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Account.class))})
+    })
+    @PostMapping(value = "/transfer")
+    public ResponseEntity<?> transfer(@Valid @RequestBody TransferToAccountModel requestModel) {
+        txService.transfer(requestModel.getFromAccountNumber(), requestModel.getToAccountNumber(),
+                requestModel.getTransferAmount());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
