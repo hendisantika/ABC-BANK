@@ -2,6 +2,8 @@ package com.hendisantika.abcbank.exception;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hendisantika.abcbank.util.AppUtil;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -51,6 +54,14 @@ public class GlobalResponseEntityExceptionHandler extends ResponseEntityExceptio
                 , messageMap);
 
         return new ResponseEntity<>(errorJsonNode, headers, status);
+    }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    protected ResponseEntity<Object> handleEntityNotFound(HttpServletRequest request, EntityNotFoundException ex) {
+        String message = ex.getMessage();
+        ObjectNode errorJsonNode = AppUtil.createErrorJsonNode(HttpStatus.NOT_FOUND,
+                request.getRequestURI(), message);
+
+        return new ResponseEntity<>(errorJsonNode, HttpStatus.NOT_FOUND);
     }
 }
