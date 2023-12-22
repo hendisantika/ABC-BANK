@@ -6,6 +6,7 @@ import com.hendisantika.abcbank.entity.Transaction;
 import com.hendisantika.abcbank.repository.TransactionRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -113,5 +114,14 @@ public class AccountTransactionService {
     @Transactional
     public List<Transaction> getTransactionHistory() {
         return this.transactionRepository.findAll();
+    }
+
+    private void insureBalance(BigDecimal amount, Account account) throws ValidationException {
+        if (account.getBalance().compareTo(amount) < 0) {
+            String message = String.format("insufficient balance ! for account# %s,  balance %s, transfer amount %s",
+                    account.getAccountNumber(), account.getBalance(), amount);
+            log.error(message);
+            throw new ValidationException(message);
+        }
     }
 }
