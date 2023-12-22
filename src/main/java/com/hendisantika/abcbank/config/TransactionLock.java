@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,4 +26,30 @@ public class TransactionLock {
     public void init() {
         accountLockMap = new ConcurrentHashMap<>();
     }
+
+    public void lock(String accountNumber) {
+        AccountLock accLock = accountLockMap.get(accountNumber);
+        // double locking : to initialize the lock object
+        if (accLock == null) {
+            synchronized (this) {
+                accLock = accountLockMap.get(accountNumber);
+                if (accLock == null) {
+                    AccountLock newLock = new AccountLock(new ReentrantLock(), 0);
+                    accountLockMap.put(accountNumber, newLock);
+                    accLock = newLock;
+                }
+            }
+
+        }
+        synchronized (this) {
+            accLock.lockCount.incrementAndGet();
+            // if other concurrent tx has removed from map using unlock- up it back
+            if (null == accountLockMap.get(accountNumber)) {
+                accountLockMap.put(accountNumber, accLock);
+            }
+        }
+
+        accLock.lock.lock();
+    }
+
 }
