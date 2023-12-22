@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Builder
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-@JsonInclude(JsonInclude.Include.ALWAYS)
+@JsonInclude()
 @Data
 @NoArgsConstructor(force = true)
 @AllArgsConstructor

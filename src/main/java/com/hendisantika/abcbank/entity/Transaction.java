@@ -2,6 +2,8 @@ package com.hendisantika.abcbank.entity;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.hendisantika.abcbank.entity.seqgenerator.StringSequenceIdentifier;
+import com.hendisantika.abcbank.util.AppUtil;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -36,7 +38,7 @@ public class Transaction implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_number_gen_seq")
-    @GenericGenerator(name = "transaction_number_gen_seq", strategy = "com.abcbank.accountmaintenance.entity.seqgenerator.StringSequenceIdentifier", parameters = {
+    @GenericGenerator(name = "transaction_number_gen_seq", strategy = "com.hendisantika.abcbank.entity.seqgenerator.StringSequenceIdentifier", parameters = {
             @Parameter(name = StringSequenceIdentifier.INCREMENT_PARAM, value = "1"),
             @Parameter(name = StringSequenceIdentifier.VALUE_PREFIX_PARAMETER, value = "TX_"),
             @Parameter(name = StringSequenceIdentifier.NUMBER_FORMAT_PARAMETER, value = "%010d")})
@@ -44,14 +46,18 @@ public class Transaction implements Serializable {
     @Column(name = "transaction_id")
     @EqualsAndHashCode.Include
     private String transactionId;
+
     @Column(name = "amount")
     private BigDecimal amount;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "discriminator", nullable = false)
     private TransactionType discriminator;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private Date transactionDate = new Date();
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_number", updatable = false)
     private Account account;
