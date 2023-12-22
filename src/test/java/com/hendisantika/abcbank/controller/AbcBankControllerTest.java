@@ -191,4 +191,10 @@ public class AbcBankControllerTest {
         acc = responseEntity.getBody();
         return acc;
     }
+
+    private Account getAccount(String accNumber) {
+        ResponseEntity<Account> responseEntity = this.testRestTemplate.exchange("/accounts/" + accNumber,
+                HttpMethod.GET, AppUtil.getHttpHeader(), Account.class);
+        return responseEntity.getBody();
+    }
 }
