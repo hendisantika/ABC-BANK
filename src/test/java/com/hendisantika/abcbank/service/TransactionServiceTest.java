@@ -6,6 +6,7 @@ import com.hendisantika.abcbank.entity.Account;
 import com.hendisantika.abcbank.repository.AccountRepository;
 import com.hendisantika.abcbank.repository.TransactionRepository;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+
+import static org.mockito.Mockito.validateMockitoUsage;
 
 /**
  * Created by IntelliJ IDEA.
@@ -59,5 +62,10 @@ public class TransactionServiceTest {
         account3 = Account.builder().accountNumber("A3").acountHolder("test user3").balance(new BigDecimal("89.00"))
                 .transactions(new ArrayList<>())
                 .build();
+    }
+
+    @AfterEach
+    public void validate() {
+        validateMockitoUsage();
     }
 }
