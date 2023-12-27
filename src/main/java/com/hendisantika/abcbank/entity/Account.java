@@ -64,8 +64,7 @@ public class Account implements Serializable {
     @Builder.Default
     private Date createdDate = new Date();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    @org.hibernate.annotations.LazyCollection(org.hibernate.annotations.LazyCollectionOption.EXTRA)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)    
     @JsonIgnore
     @ToString.Exclude
     private List<Transaction> transactions;
