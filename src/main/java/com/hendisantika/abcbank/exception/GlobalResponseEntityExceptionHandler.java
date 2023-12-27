@@ -33,7 +33,7 @@ import java.util.Map;
 @ControllerAdvice(basePackages = {"com.abcbank.accountmaintenance"})
 public class GlobalResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(GlobalResponseEntityExceptionHandler.class);
 
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,

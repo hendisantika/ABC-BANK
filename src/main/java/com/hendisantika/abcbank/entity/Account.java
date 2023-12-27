@@ -35,6 +35,8 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@Table(name = "account")
 public class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,7 +44,7 @@ public class Account implements Serializable {
     @Id
     @Column(name = "account_number")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_number_gen_seq")
-    @GenericGenerator(name = "account_number_gen_seq", strategy = "com.abcbank.accountmaintenance.entity.seqgenerator.StringSequenceIdentifier", parameters = {
+    @GenericGenerator(name = "account_number_gen_seq", type = StringSequenceIdentifier.class, parameters = {
             @Parameter(name = StringSequenceIdentifier.INCREMENT_PARAM, value = "1"),
             @Parameter(name = StringSequenceIdentifier.VALUE_PREFIX_PARAMETER, value = "ABC_"),
             @Parameter(name = StringSequenceIdentifier.NUMBER_FORMAT_PARAMETER, value = "%010d")})
@@ -54,7 +56,7 @@ public class Account implements Serializable {
     @Column(name = "account_holder")
     private String acountHolder;
 
-    @Column(name = "balance", precision = 19, scale = 2, columnDefinition = "DECIMAL(19,2)")
+    @Column(name = "balance", precision = 19, columnDefinition = "DECIMAL(19,2)")
     @JdbcTypeCode(SqlTypes.DOUBLE)
     private BigDecimal balance;
 
@@ -62,8 +64,7 @@ public class Account implements Serializable {
     @Builder.Default
     private Date createdDate = new Date();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    @org.hibernate.annotations.LazyCollection(org.hibernate.annotations.LazyCollectionOption.EXTRA)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)    
     @JsonIgnore
     @ToString.Exclude
     private List<Transaction> transactions;

@@ -41,24 +41,18 @@ public class AccountTransactionHistory implements Serializable {
     private Date createdDate;
 
     public static Converter<Transaction, AccountTransactionHistory> converter() {
-        return new Converter<Transaction, AccountTransactionHistory>() {
-
-            @Override
-            public AccountTransactionHistory convert(MappingContext<Transaction, AccountTransactionHistory> context) {
-
-                Transaction source = context.getSource();
-                AccountTransactionHistory destination = new AccountTransactionHistory();
-                destination.setAccountNumber(source.getAccount().getAccountNumber());
-                BigDecimal amount = source.getAmount();
-                if (null != amount) {
-                    BigDecimal scalledAmount = amount.setScale(2, RoundingMode.HALF_UP);
-                    destination.setAmount(
-                            source.getDiscriminator() == Transaction.TransactionType.CREDIT ? scalledAmount : scalledAmount.negate());
-
-                }
-                destination.setCreatedDate(source.getAccount().getCreatedDate());
-                return destination;
+        return (MappingContext<Transaction, AccountTransactionHistory> context) -> {
+            Transaction source = context.getSource();
+            AccountTransactionHistory destination = new AccountTransactionHistory();
+            destination.setAccountNumber(source.getAccount().getAccountNumber());
+            BigDecimal amount1 = source.getAmount();
+            if (null != amount1) {
+                BigDecimal scalledAmount = amount1.setScale(2, RoundingMode.HALF_UP);
+                destination.setAmount(
+                        source.getDiscriminator() == Transaction.TransactionType.CREDIT ? scalledAmount : scalledAmount.negate());
             }
+            destination.setCreatedDate(source.getAccount().getCreatedDate());
+            return destination;
         };
     }
 }

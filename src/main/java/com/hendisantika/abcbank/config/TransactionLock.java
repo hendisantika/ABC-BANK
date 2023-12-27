@@ -31,16 +31,13 @@ public class TransactionLock {
     public void lock(String accountNumber) {
         AccountLock accLock = accountLockMap.get(accountNumber);
         // double locking : to initialize the lock object
-        if (accLock == null) {
-            synchronized (this) {
-                accLock = accountLockMap.get(accountNumber);
-                if (accLock == null) {
-                    AccountLock newLock = new AccountLock(new ReentrantLock(), 0);
-                    accountLockMap.put(accountNumber, newLock);
-                    accLock = newLock;
-                }
+        synchronized (this) {
+            accLock = accountLockMap.get(accountNumber);
+            if (accLock == null) {
+                AccountLock newLock = new AccountLock(new ReentrantLock(), 0);
+                accountLockMap.put(accountNumber, newLock);
+                accLock = newLock;
             }
-
         }
         synchronized (this) {
             accLock.lockCount.incrementAndGet();
@@ -74,16 +71,13 @@ public class TransactionLock {
 
     public boolean tryLock(String accountNumber) {
         AccountLock accLock = accountLockMap.get(accountNumber);
-        if (accLock == null) {
-            synchronized (this) {
-                accLock = accountLockMap.get(accountNumber);
-                if (accLock == null) {
-                    AccountLock newLock = new AccountLock(new ReentrantLock(), 0);
-                    accountLockMap.put(accountNumber, newLock);
-                    accLock = newLock;
-                }
+        synchronized (this) {
+            accLock = accountLockMap.get(accountNumber);
+            if (accLock == null) {
+                AccountLock newLock = new AccountLock(new ReentrantLock(), 0);
+                accountLockMap.put(accountNumber, newLock);
+                accLock = newLock;
             }
-
         }
 
         boolean isAcquired = accLock.lock.tryLock();
