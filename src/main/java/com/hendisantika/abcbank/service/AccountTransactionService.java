@@ -46,7 +46,7 @@ public class AccountTransactionService {
         try {
             txLock.lock(accountNumber);
             // reload entity after lock - no other transaction performing transfer or withdraw at this point
-            this.refreshEntity(account);
+            entityManager.refresh(account);
             // check sufficient balance after accruing lock - may be previous tx has already withdraw some amount
             insureBalance(amount, account);
 

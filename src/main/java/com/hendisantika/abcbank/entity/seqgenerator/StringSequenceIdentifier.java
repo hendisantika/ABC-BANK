@@ -29,6 +29,7 @@ public class StringSequenceIdentifier extends SequenceStyleGenerator {
     public static final String VALUE_PREFIX_DEFAULT = "";
     public static final String NUMBER_FORMAT_PARAMETER = "numberFormat";
     public static final String NUMBER_FORMAT_DEFAULT = "%d";
+    private static final long serialVersionUID = -8773589794589283105L;
     private String valuePrefix;
     private String numberFormat;
 
