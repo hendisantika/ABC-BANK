@@ -1,0 +1,137 @@
+27-12-2023 19:28:04.500 [restartedMain] INFO 
+                c.h.abcbank.AbcBankApplication.logStarting - Starting AbcBankApplication using Java 21 with PID 49380 (/Users/hendisantika/IdeaProjects/ABC-BANK/target/classes started by hendisantika in /Users/hendisantika/IdeaProjects/ABC-BANK)
+27-12-2023 19:28:04.502 [restartedMain] INFO 
+                c.h.abcbank.AbcBankApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+27-12-2023 19:28:04.502 [restartedMain] DEBUG
+                o.s.boot.SpringApplication.load - Loading source class com.hendisantika.abcbank.AbcBankApplication
+27-12-2023 19:28:04.523 [restartedMain] INFO 
+                o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor.logTo - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+27-12-2023 19:28:04.524 [restartedMain] INFO 
+                o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor.logTo - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+27-12-2023 19:28:04.899 [restartedMain] INFO 
+                o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+27-12-2023 19:28:04.932 [restartedMain] INFO 
+                o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 28 ms. Found 2 JPA repository interfaces.
+27-12-2023 19:28:05.267 [restartedMain] INFO 
+                o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+27-12-2023 19:28:05.274 [restartedMain] INFO 
+                o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+27-12-2023 19:28:05.274 [restartedMain] INFO 
+                o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.17]
+27-12-2023 19:28:05.294 [restartedMain] INFO 
+                o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+27-12-2023 19:28:05.294 [restartedMain] INFO 
+                o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 770 ms
+27-12-2023 19:28:05.309 [restartedMain] INFO 
+                com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Starting...
+27-12-2023 19:28:05.413 [restartedMain] INFO 
+                com.zaxxer.hikari.pool.HikariPool.checkFailFast - HikariPool-1 - Added connection conn0: url=jdbc:h2:file:~/db/abcbank.data user=NARUTO
+27-12-2023 19:28:05.414 [restartedMain] INFO 
+                com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Start completed.
+27-12-2023 19:28:05.419 [restartedMain] INFO 
+                o.s.b.a.h.H2ConsoleAutoConfiguration.logDataSources - H2 console available at '/h2-console'. Database available at 'jdbc:h2:file:~/db/abcbank.data'
+27-12-2023 19:28:05.482 [restartedMain] INFO 
+                o.h.jpa.internal.util.LogHelper.logPersistenceUnitInformation - HHH000204: Processing PersistenceUnitInfo [name: default]
+27-12-2023 19:28:05.514 [restartedMain] INFO 
+                org.hibernate.Version.logVersion - HHH000412: Hibernate ORM core version 6.4.1.Final
+27-12-2023 19:28:05.534 [restartedMain] INFO 
+                o.h.c.i.RegionFactoryInitiator.initiateService - HHH000026: Second-level cache disabled
+27-12-2023 19:28:05.648 [restartedMain] INFO 
+                o.s.o.j.p.SpringPersistenceUnitInfo.addTransformer - No LoadTimeWeaver setup: ignoring JPA class transformer
+27-12-2023 19:28:05.673 [restartedMain] WARN 
+                org.hibernate.orm.deprecation.constructDialect - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+27-12-2023 19:28:06.145 [restartedMain] INFO 
+                o.h.e.t.j.p.i.JtaPlatformInitiator.initiateService - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+27-12-2023 19:28:06.146 [restartedMain] INFO 
+                o.s.o.j.LocalContainerEntityManagerFactoryBean.buildNativeEntityManagerFactory - Initialized JPA EntityManagerFactory for persistence unit 'default'
+27-12-2023 19:28:06.449 [restartedMain] WARN 
+                o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration.openEntityManagerInViewInterceptor - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+27-12-2023 19:28:06.580 [restartedMain] WARN 
+                o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration.checkTemplateLocationExists - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+27-12-2023 19:28:06.773 [restartedMain] INFO 
+                o.s.b.d.a.OptionalLiveReloadServer.startServer - LiveReload server is running on port 35729
+27-12-2023 19:28:06.802 [restartedMain] WARN 
+                o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext.refresh - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+27-12-2023 19:28:06.804 [restartedMain] INFO 
+                o.s.o.j.LocalContainerEntityManagerFactoryBean.destroy - Closing JPA EntityManagerFactory for persistence unit 'default'
+27-12-2023 19:28:06.806 [restartedMain] INFO 
+                com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown initiated...
+27-12-2023 19:28:06.814 [restartedMain] INFO 
+                com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown completed.
+27-12-2023 19:28:06.825 [restartedMain] INFO 
+                o.s.b.a.l.ConditionEvaluationReportLogger.logMessage - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+27-12-2023 19:28:06.836 [restartedMain] ERROR
+                o.s.b.d.LoggingFailureAnalysisReporter.report - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+27-12-2023 19:28:22.157 [restartedMain] INFO 
+                c.h.abcbank.AbcBankApplication.logStarting - Starting AbcBankApplication using Java 21 with PID 49422 (/Users/hendisantika/IdeaProjects/ABC-BANK/target/classes started by hendisantika in /Users/hendisantika/IdeaProjects/ABC-BANK)
+27-12-2023 19:28:22.159 [restartedMain] INFO 
+                c.h.abcbank.AbcBankApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+27-12-2023 19:28:22.160 [restartedMain] DEBUG
+                o.s.boot.SpringApplication.load - Loading source class com.hendisantika.abcbank.AbcBankApplication
+27-12-2023 19:28:22.185 [restartedMain] INFO 
+                o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor.logTo - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+27-12-2023 19:28:22.185 [restartedMain] INFO 
+                o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor.logTo - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+27-12-2023 19:28:22.867 [restartedMain] INFO 
+                o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+27-12-2023 19:28:22.904 [restartedMain] WARN 
+                o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext.refresh - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanDefinitionStoreException: Cannot parse com.hendisantika.abcbank.repository.AccountRepository metadata
+27-12-2023 19:28:22.910 [restartedMain] INFO 
+                o.s.b.a.l.ConditionEvaluationReportLogger.logMessage - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+27-12-2023 19:28:22.922 [restartedMain] ERROR
+                o.s.boot.SpringApplication.reportFailure - Application run failed
+org.springframework.beans.factory.BeanDefinitionStoreException: Cannot parse com.hendisantika.abcbank.repository.AccountRepository metadata
+	at org.springframework.data.repository.config.FragmentMetadata.getClassMetadata(FragmentMetadata.java:89)
+	at org.springframework.data.repository.config.FragmentMetadata.getFragmentInterfaces(FragmentMetadata.java:55)
+	at org.springframework.data.repository.config.RepositoryBeanDefinitionBuilder.registerRepositoryFragmentsImplementation(RepositoryBeanDefinitionBuilder.java:226)
+	at org.springframework.data.repository.config.RepositoryBeanDefinitionBuilder.registerRepositoryFragments(RepositoryBeanDefinitionBuilder.java:207)
+	at org.springframework.data.repository.config.RepositoryBeanDefinitionBuilder.build(RepositoryBeanDefinitionBuilder.java:135)
+	at org.springframework.data.repository.config.RepositoryConfigurationDelegate.registerRepositoriesIn(RepositoryConfigurationDelegate.java:175)
+	at org.springframework.boot.autoconfigure.data.AbstractRepositoryConfigurationSourceSupport.registerBeanDefinitions(AbstractRepositoryConfigurationSourceSupport.java:62)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.lambda$loadBeanDefinitionsFromRegistrars$1(ConfigurationClassBeanDefinitionReader.java:376)
+	at java.base/java.util.LinkedHashMap.forEach(LinkedHashMap.java:986)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsFromRegistrars(ConfigurationClassBeanDefinitionReader.java:375)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForConfigurationClass(ConfigurationClassBeanDefinitionReader.java:148)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitions(ConfigurationClassBeanDefinitionReader.java:120)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:428)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:289)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:349)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:118)
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:789)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:606)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:464)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1358)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1347)
+	at com.hendisantika.abcbank.AbcBankApplication.main(AbcBankApplication.java:15)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: java.io.FileNotFoundException: class path resource [com/hendisantika/abcbank/repository/AccountRepository.class] cannot be opened because it does not exist
+	at org.springframework.core.io.ClassPathResource.getInputStream(ClassPathResource.java:215)
+	at org.springframework.core.type.classreading.SimpleMetadataReader.getClassReader(SimpleMetadataReader.java:54)
+	at org.springframework.core.type.classreading.SimpleMetadataReader.<init>(SimpleMetadataReader.java:48)
+	at org.springframework.core.type.classreading.SimpleMetadataReaderFactory.getMetadataReader(SimpleMetadataReaderFactory.java:103)
+	at org.springframework.core.type.classreading.CachingMetadataReaderFactory.getMetadataReader(CachingMetadataReaderFactory.java:122)
+	at org.springframework.core.type.classreading.SimpleMetadataReaderFactory.getMetadataReader(SimpleMetadataReaderFactory.java:81)
+	at org.springframework.data.repository.config.FragmentMetadata.getClassMetadata(FragmentMetadata.java:87)
+	... 27 common frames omitted
