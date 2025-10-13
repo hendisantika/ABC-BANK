@@ -2,7 +2,11 @@ package com.hendisantika.abcbank.controller;
 
 import com.hendisantika.abcbank.AbcBankApplication;
 import com.hendisantika.abcbank.entity.Account;
-import com.hendisantika.abcbank.model.*;
+import com.hendisantika.abcbank.model.AccountTransactionHistory;
+import com.hendisantika.abcbank.model.DepositToAccountModel;
+import com.hendisantika.abcbank.model.TransactionHistory;
+import com.hendisantika.abcbank.model.TransferToAccountModel;
+import com.hendisantika.abcbank.model.WithdrawFromAccountModel;
 import com.hendisantika.abcbank.util.AppUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -75,8 +79,8 @@ public class AbcBankControllerTest {
                 AppUtil.getHttpHeader(),
                 Account.class);
         // verify
-        Assertions.assertEquals(a1BalBeforeTransfer.subtract(new BigDecimal("10.80")),
-                responseEntity.getBody().getBalance());
+        Assertions.assertEquals(0, a1BalBeforeTransfer.subtract(new BigDecimal("10.80"))
+                .compareTo(responseEntity.getBody().getBalance()));
 
     }
 
@@ -102,8 +106,8 @@ public class AbcBankControllerTest {
         // load account1 again
         Account account = getAccount(a1.getAccountNumber());
         // verify
-        Assertions.assertEquals(a1BalBeforeTransfer.subtract(new BigDecimal("10.80")),
-                account.getBalance());
+        Assertions.assertEquals(0, a1BalBeforeTransfer.subtract(new BigDecimal("10.80"))
+                .compareTo(account.getBalance()));
 
         // verify the transaction history record
         ResponseEntity<List<TransactionHistory>> txHistoryResponse = this.testRestTemplate.exchange(
@@ -170,7 +174,7 @@ public class AbcBankControllerTest {
         // load account1 again
         Account accout = getAccount(a1.getAccountNumber());
         // verify
-        Assertions.assertEquals(a1BalBeforeTransfer, accout.getBalance());
+        Assertions.assertEquals(0, a1BalBeforeTransfer.compareTo(accout.getBalance()));
 
         // verify the transaction history record
         ResponseEntity<List<AccountTransactionHistory>> txHistoryResponse = this.testRestTemplate.exchange(
